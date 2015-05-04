@@ -24,6 +24,7 @@ var step = function() {
 // computes position of paddles and balls
 var update = function() {
     player.update();
+    computer.update(ball);
     ball.update(player.paddle, computer.paddle);
 };
 // draws background
@@ -93,6 +94,23 @@ Player.prototype.render = function() {
 // draws the computer paddle
 Computer.prototype.render = function() {
     this.paddle.render();
+};
+// Calculate compuer paddle position
+Computer.prototype.update = function(ball) {
+    var x_pos = ball.x;
+    var diff = -((this.paddle.x + (this.paddle.width / 2)) - x_pos);
+    // max speed left
+    if (diff < 0 && diff < -4) {
+        diff = -5;
+    } else if (diff > 0 && diff > 4) {
+        diff = 5;
+    }
+    this.paddle.move(diff, 0);
+    if (this.paddle.x < 0) {
+        this.padd.x = 0;
+    } else if (this.paddle.x + this.paddle.width > 400) {
+        this.paddle.x = 400 - this.paddle.width;
+    }
 };
 // Ball Constructor
 function Ball(x, y) {
